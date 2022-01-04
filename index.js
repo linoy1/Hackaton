@@ -1,5 +1,5 @@
 const selectedLocations = [
-    {title: 'אולם ספורט מרום נווה', order: 1, latlng: { lat: 32.073191, lng: 34.832483 }},
+    {title: 'אולם ספורט מרום נווה', order: 1, videoUrl: 'assets/videos/1.mp4', latlng: { lat: 32.073191, lng: 34.832483 }},
     {title: 'רולדין', order: 2, latlng: { lat: 32.07176, lng: 34.82921 }},
     {title: 'פארק מרום נווה', order: 3, latlng: { lat: 32.07169, lng: 34.83081 }},
     {title: 'מרכז נהורה', order: 4, latlng: { lat: 32.07204, lng: 34.82907 }},
@@ -18,12 +18,24 @@ const initMap = () => {
 };
 
 const setMarkers = () => {
-    selectedLocations.forEach(location => {
-        new google.maps.Marker({
+    selectedLocations.forEach((location) => {
+        var marker = new google.maps.Marker({
             position: location.latlng,
             map,
             title: location.title,
         });
+
+        if (location.videoUrl) {
+            marker.addListener('click', () => {
+                $('.modal-title').text(location.title);
+                $('#modal').modal('show');
+                $('.modal-body').html(`
+                    <video class='video' controls autoplay>
+                        <source src='${location.videoUrl}' type="video/mp4">
+                    </video>
+                `);
+            });
+        }
     });
 }
 
